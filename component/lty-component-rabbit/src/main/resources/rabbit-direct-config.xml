@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+                        http://www.springframework.org/schema/beans/spring-beans.xsd
+                        http://www.springframework.org/schema/rabbit
+                        http://www.springframework.org/schema/rabbit/spring-rabbit.xsd
+                        http://www.springframework.org/schema/context
+                        http://www.springframework.org/schema/context/spring-context.xsd">
+                        
+	<context:property-placeholder location="classpath:rabbit.properties" />
+    
+    <rabbit:connection-factory id="connectionFactory" host="${rabbit.host}" port="${rabbit.port}"
+    	username="${rabbit.username}" password="${rabbit.password}" />
+    	
+    <rabbit:template id="amqpTemplate" connection-factory="connectionFactory" exchange="cn.muchinfo.exchange.test"/>
+    
+    <rabbit:admin id="connAdmin" connection-factory="connectionFactory" />
+    
+    <!-- queue A -->
+    <rabbit:queue id="cn.muchinfo.queue.test.A" name="cn.muchinfo.queue.test.A"
+    	durable="true" auto-delete="false" exclusive="false" declared-by="connAdmin" />
+    
+    <!-- queue B -->
+    <rabbit:queue id="cn.muchinfo.queue.test.B" name="cn.muchinfo.queue.test.B"
+    	durable="true" auto-delete="false" exclusive="false" declared-by="connAdmin" />
+    	
+    <!-- direct exchange -->
+    <rabbit:direct-exchange name="cn.muchinfo.exchange.test" durable="true" auto-delete="false" declared-by="connAdmin">
+    	<rabbit:bindings>
+    		<rabbit:binding queue="cn.muchinfo.queue.test.A" key="cn.muchinfo.queue.test.A" />
+    	</rabbit:bindings>
+    </rabbit:direct-exchange>
+    
+    <rabbit:direct-exchange name="cn.muchinfo.exchange.test" durable="true" auto-delete="false" declared-by="connAdmin">
+    	<rabbit:bindings>
+    		<rabbit:binding queue="cn.muchinfo.queue.test.A" key="cn.muchinfo.queue.test.A" />
+    		<rabbit:binding queue="cn.muchinfo.queue.test.B" key="cn.muchinfo.queue.test.B" />
+    	</rabbit:bindings>
+    </rabbit:direct-exchange>
+    
+    <bean id="directMessageReceiver" class="com.lty.components.rabbit.consumer.DirectMessageConsumer" />
+    <bean id="directMessageReceiverB" class="com.lty.components.rabbit.consumer.DirectMessageConsumerB" />
+    
+    <rabbit:listener-container connection-factory="connectionFactory">
+    	<rabbit:listener queues="cn.muchinfo.queue.test.A" ref="directMessageReceiver"/>
+    </rabbit:listener-container>
+    
+    <rabbit:listener-container connection-factory="connectionFactory">
+    	<rabbit:listener queues="cn.muchinfo.queue.test.B" ref="directMessageReceiverB"/>
+    </rabbit:listener-container>
+</beans>
