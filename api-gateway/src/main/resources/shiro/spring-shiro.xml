@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+						http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+						http://www.springframework.org/schema/context
+						http://www.springframework.org/schema/context/spring-context-4.0.xsd
+						http://www.springframework.org/schema/aop
+						http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+						http://www.springframework.org/schema/tx
+						http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+
+	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<property name="securityManager" ref="securityManager" />
+		<!-- 测试地址，为了方便，实际应该用登录页面，因为api项目部需要页面，所以显示一个index.jsp <property name="loginUrl" 
+			value="/login/login.jsp" /> -->
+		<property name="loginUrl" value="/index.jsp" />
+		<property name="successUrl" value="/index.jsp" />
+		<property name="unauthorizedUrl" value="/login/login.jsp" />
+		<property name="filterChainDefinitions">
+			<value>
+				/login/** = anon
+				/jslib/** = anon
+				/style/** = anon
+				/index* =anon
+				/swagger/**=anon
+				/api-docs/**=anon
+				/**=authc
+			</value>
+
+		</property>
+	</bean>
+
+	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
+
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<property name="cacheManager" ref="cacheManager" />
+		<property name="realm" ref="myRealm" />
+		<property name="sessionManager" ref="sessionManager" />
+	</bean>
+	<bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager"></bean>
+	<!-- <bean id="cacheManager" class="org.apache.shiro.cache.MemoryConstrainedCacheManager" 
+		/> -->
+	<bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager" />
+	<!-- <bean id="myRealm" class="com.lty.api.gateway.realm.ShiroDBRealm"> 
+		</bean> -->
+	<!-- 下面是shiro 加密加盐 -->
+	<bean id="myRealm" class="com.lty.api.gateway.realm.ShiroDBRealm">
+		<property name="credentialsMatcher" ref="sha256Matcher"></property>
+	</bean>
+	<bean id="sha256Matcher" class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+		<property name="hashAlgorithmName" value="SHA-256"></property>
+		<property name="storedCredentialsHexEncoded" value="false"></property>
+		<property name="hashIterations" value="10"></property>
+	</bean>
+</beans>
+	

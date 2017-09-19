@@ -1,0 +1,3 @@
+测试登录API地址
+域名和应用需要根据实际修改http://api.lty.com/api-gateway/
+http://api.lty.com/api-gateway/login/login?loginName=admin&password=3a960464d36c1b8bad183ed57ee79c0e39953cce
