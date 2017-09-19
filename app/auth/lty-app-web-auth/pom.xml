@@ -1,0 +1,166 @@
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>lty.framework</groupId>
+		<artifactId>lty-framework-parent</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+		<relativePath>../../../framework/lty-framework-parent</relativePath>
+	</parent>
+
+	<groupId>lty.apps</groupId>
+	<artifactId>lty-app-web-auth</artifactId>
+	<packaging>war</packaging>
+	<name>lty-app-web-auth</name>
+	<build>
+		<finalName>lty-app-web-auth</finalName>
+
+		<resources>
+			<resource>
+				<targetPath>${project.build.directory}/classes</targetPath>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>**/*.xml</include>
+					<include>**/*.properties</include>
+				</includes>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.mortbay.jetty</groupId>
+				<artifactId>maven-jetty-plugin</artifactId>
+				<version>6.1.7</version>
+				<configuration>
+					<connectors>
+						<connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
+							<port>8888</port>
+							<maxIdleTime>30000</maxIdleTime>
+						</connector>
+					</connectors>
+					<webAppSourceDirectory>${project.build.directory}/${pom.artifactId}-${pom.version}</webAppSourceDirectory>
+					<contextPath>/</contextPath>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>lty.utils</groupId>
+				<artifactId>lty-util-mojo-deploy</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+				<!-- 这里是我自定义的内容 -->
+				<configuration>
+					<content>tomcat</content>
+				</configuration>
+				<!-- <executions> <execution> <goals> <goal>touch</goal> </goals> <phase>compile</phase> 
+					</execution> </executions> -->
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<overlays>
+						<overlay>
+							<groupId>lty.utils</groupId>
+							<artifactId>lty-util-swagger</artifactId>
+						</overlay>
+					</overlays>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	<dependencies>
+		<dependency>
+			<groupId>lty.framework</groupId>
+			<artifactId>lty-framework-config</artifactId>
+			<version>${framework-config.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>lty.framework</groupId>
+			<artifactId>lty-framework-web</artifactId>
+			<version>${framework-web.version}</version>
+		</dependency>
+		
+<!-- 		<dependency> -->
+<!-- 			<groupId>lty.apps</groupId> -->
+<!-- 			<artifactId>lty-app-facade-auth</artifactId> -->
+<!-- 			<version>${facade-auth.version}</version> -->
+<!-- 		</dependency> -->
+		
+<!-- 		单体应用的时候需要引入service, 分布式的时候去掉service引入 -->
+		<dependency>
+			<groupId>lty.apps</groupId>
+			<artifactId>lty-app-service-auth</artifactId>
+			<version>${service-auth.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>lty.utils</groupId>
+			<artifactId>lty-util-swagger</artifactId>
+			<version>${framework-swagger.version}</version>
+			<type>war</type>
+		</dependency>
+		<dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-oxm</artifactId>
+        </dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-support</artifactId>
+        </dependency>
+		<dependency>
+            <groupId>org.freemarker</groupId>
+			<artifactId>freemarker</artifactId>
+        </dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+		    <groupId>javax.servlet.jsp</groupId>
+		    <artifactId>jsp-api</artifactId>
+		    <scope>provided</scope>
+		</dependency>
+		<dependency>
+		    <groupId>javax.servlet.jsp</groupId>
+		    <artifactId>javax.servlet.jsp-api</artifactId>
+		    <version>2.3.1</version>
+		    <scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.geronimo.specs</groupId>
+			<artifactId>geronimo-servlet_3.0_spec</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<!-- 自定义扫描依赖包 -->
+		<dependency>
+			<groupId>lty.utils</groupId>
+			<artifactId>lty-util-scan</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>taglibs</groupId>
+			<artifactId>standard</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+</project>

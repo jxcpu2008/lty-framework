@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lty.app.service.auth.dao.UserMapper">
+	<resultMap id="BaseResultMap" type="User">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="login_name" property="loginName" jdbcType="VARCHAR" />
+		<result column="password" property="password" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="VARCHAR" />
+		<result column="type" property="type" jdbcType="VARCHAR" />
+		<result column="payment_code" property="paymentCode" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="user_no" property="userNo" jdbcType="BIGINT" />
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		id, login_name, status, type, payment_code, create_time, user_no
+	</sql>
+	
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select <include refid="Base_Column_List" /> from t_auth_user where id = #{id,jdbcType=VARCHAR}
+	</select>
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from t_auth_user where id = #{id,jdbcType=VARCHAR}
+	</delete>
+	
+	<insert id="insert" parameterType="User">
+		insert into t_auth_user 
+		(
+			id,
+		 	login_name, 
+		 	password, 
+		 	status, 
+		 	type, 
+		 	payment_code, 
+		 	create_time, 
+		 	user_no
+		)
+		values
+		(
+			#{id,jdbcType=VARCHAR}, 
+			#{loginName,jdbcType=VARCHAR},
+			#{password,jdbcType=VARCHAR},
+			#{status,jdbcType=VARCHAR},
+			#{type,jdbcType=VARCHAR}, 
+			#{paymentCode,jdbcType=VARCHAR},
+			#{createTime,jdbcType=TIMESTAMP}, 
+			#{userNo,jdbcType=BIGINT}
+		)
+	</insert>
+	
+	<insert id="insertSelective" parameterType="User">
+		insert into t_auth_user
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="loginName != null">
+				login_name,
+			</if>
+			<if test="password != null">
+				password,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="type != null">
+				type,
+			</if>
+			<if test="paymentCode != null">
+				payment_code,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="userNo != null">
+				user_no,
+			</if>
+		</trim>
+		
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=VARCHAR},
+			</if>
+			<if test="loginName != null">
+				#{loginName,jdbcType=VARCHAR},
+			</if>
+			<if test="password != null">
+				#{password,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=VARCHAR},
+			</if>
+			<if test="type != null">
+				#{type,jdbcType=VARCHAR},
+			</if>
+			<if test="paymentCode != null">
+				#{paymentCode,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="userNo != null">
+				#{userNo,jdbcType=BIGINT},
+			</if>
+		</trim>
+	</insert>
+	
+	<update id="updateByPrimaryKeySelective" parameterType="User">
+		update t_auth_user
+		<set>
+			<if test="loginName != null">
+				login_name = #{loginName,jdbcType=VARCHAR},
+			</if>
+			<if test="password != null">
+				password = #{password,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=VARCHAR},
+			</if>
+			<if test="type != null">
+				type = #{type,jdbcType=VARCHAR},
+			</if>
+			<if test="paymentCode != null">
+				payment_code = #{paymentCode,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="userNo != null">
+				user_no = #{userNo,jdbcType=BIGINT},
+			</if>
+		</set>
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+	
+	<update id="updateByPrimaryKey" parameterType="User">
+		update t_auth_user
+		set login_name = #{loginName,jdbcType=VARCHAR},
+		password = #{password,jdbcType=VARCHAR},
+		status = #{status,jdbcType=VARCHAR},
+		type = #{type,jdbcType=VARCHAR},
+		payment_code = #{paymentCode,jdbcType=VARCHAR},
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		user_no = #{userNo,jdbcType=BIGINT}
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+
+	<!-- 自定 -->
+	<select id="findObjectsByPage" resultMap="BaseResultMap" parameterType="com.lty.app.facade.auth.vo.UserQueryModel">
+		select <include refid="Base_Column_List" />
+		from t_auth_user
+		<trim prefix="WHERE" prefixOverrides="AND">
+			<if test="loginName != null">
+				and login_name = #{loginName,jdbcType=VARCHAR}
+			</if>
+			<if test="password != null">
+				and password = #{password,jdbcType=VARCHAR}
+			</if>
+			<if test="status != null">
+				and status = #{status,jdbcType=VARCHAR}
+			</if>
+			<if test="type != null">
+				and type = #{type,jdbcType=VARCHAR}
+			</if>
+			<if test="paymentCode != null">
+				and payment_code = #{paymentCode,jdbcType=VARCHAR}
+			</if>
+			<if test="creatTime != null">
+				and create_time = #{createTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="userNo != null">
+				and user_no = #{userNo,jdbcType=BIGINT}
+			</if>
+		</trim>
+	</select>
+	
+	<resultMap type="User" id="userResultMap3" extends="BaseResultMap">
+		<collection property="roles" javaType="list" ofType="com.lty.app.facade.auth.model.Role">
+			<id property="id" column="role_id" />
+			<result column="role_name" property="name" />
+		</collection>
+	</resultMap>
+	
+	<select id="findUserAndRoles" resultMap="userResultMap3" parameterType="com.lty.app.facade.auth.vo.UserQueryModel">
+		SELECT
+		u.id,
+		u.login_name,
+		u.status,
+		u.type,
+		u.payment_code,
+		u.create_time,
+		u.user_no,
+		r.id role_id,
+		r.name role_name
+		FROM
+		(
+			<include refid="select_user_by_page" />
+		) u
+		left JOIN
+		t_auth_user_role ur ON u.ID
+		= ur.USER_ID
+		left JOIN
+		t_auth_role
+		r ON
+		ur.ROLE_ID = r.ID
+		order by ${sort} ${order}
+	</select>
+	
+	<select id="countUsers" resultType="int" parameterType="com.lty.app.facade.auth.vo.UserQueryModel">
+		select count(0) from 
+		(
+			<include refid="select_user_by_page" />
+		) u
+	</select>
+	
+	<sql id="select_user_by_page">
+		SELECT * from t_auth_user
+		<where>
+			<if test="loginName != null and loginName != ''">
+				and login_name like concat('%', #{loginName, jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="createTimeStart != null and createTimeStart != ''">
+				and DATE_FORMAT(create_time, '%Y-%m-%d %H:%i:%s') <![CDATA[ >= ]]> #{createTimeStart}
+			</if>
+			<if test="createTimeEnd != null and createTimeEnd != ''">
+				and DATE_FORMAT(create_time, '%Y-%m-%d %H:%i:%s') <![CDATA[ <= ]]> #{createTimeEnd}
+			</if>
+		</where>
+		LIMIT #{pageModel.start, jdbcType=INTEGER}, #{pageModel.pageShow, jdbcType=INTEGER}
+	</sql>
+	
+	<select id="login" resultMap="BaseResultMap" parameterType="User">
+		select id, login_name, password, status, type, payment_code, create_time, user_no
+		from t_auth_user
+		<trim prefix="WHERE" prefixOverrides="AND">
+			<if test="loginName != null">
+				and login_name = #{loginName,jdbcType=VARCHAR}
+			</if>
+			<if test="password != null">
+				and password = #{password,jdbcType=VARCHAR}
+			</if>
+		</trim>
+	</select>
+
+	<select id="findUserByLoginName" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select id, login_name,password,status, type
+		from t_auth_user
+		where login_name = #{loginName,jdbcType=VARCHAR}
+	</select>
+</mapper>

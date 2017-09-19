@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lty.app.service.auth.dao.RoleMapper">
+	<resultMap id="BaseResultMap" type="com.lty.app.facade.auth.model.Role">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, name
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from t_auth_role
+		where id = #{id,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from
+		t_auth_role
+		where id = #{id,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.lty.app.facade.auth.model.Role">
+		insert into t_auth_role (id,
+		name)
+		values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.lty.app.facade.auth.model.Role">
+		insert into t_auth_role
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="name != null">
+				name,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=VARCHAR},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.lty.app.facade.auth.model.Role">
+		update t_auth_role
+		<set>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.lty.app.facade.auth.model.Role">
+		update t_auth_role
+		set name = #{name,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+	<!-- 自定 -->
+	<select id="findObjectsByPage" resultMap="BaseResultMap"
+		parameterType="com.lty.app.facade.auth.model.Role">
+		select
+		<include refid="Base_Column_List" />
+		from t_auth_role
+		<trim prefix="WHERE" prefixOverrides="AND">
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</select>
+	<resultMap type="com.lty.app.facade.auth.model.Role" id="roleResourcesResultMap"
+		extends="BaseResultMap">
+		<collection property="resources" javaType="list"
+			ofType="com.lty.app.facade.auth.model.Resource">
+			<id property="id" column="resource_id" />
+			<result column="text" property="text" />
+		</collection>
+	</resultMap>
+	
+	<select id="findRoleAndResources" resultMap="roleResourcesResultMap" parameterType="com.lty.app.facade.auth.model.Role">
+		SELECT
+		r.id,
+		r.name,
+		re.id resource_id,
+		re.text
+		FROM
+		(
+			<include refid="select_role_by_page" />
+		) r
+		LEFT JOIN
+		t_auth_role_resource rr on r.id = rr.role_id
+		LEFT JOIN
+		t_auth_resource re on rr.resource_id = re.id
+	</select>
+	
+	<select id="countRoles" resultType="int" parameterType="com.lty.app.facade.auth.vo.RoleQueryModel">
+		select count(0) from
+		(
+			<include refid="select_role_by_page" />
+		) r
+	</select>
+	
+	<sql id="select_role_by_page">
+		SELECT * from t_auth_role
+		<trim prefix="WHERE" prefixOverrides="AND">
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+		</trim>
+		LIMIT #{pageModel.start,jdbcType=INTEGER}, #{pageModel.pageShow,jdbcType=INTEGER}
+	</sql>
+</mapper>
