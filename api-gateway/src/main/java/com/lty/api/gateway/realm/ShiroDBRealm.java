@@ -88,8 +88,11 @@ public class ShiroDBRealm extends AuthorizingRealm {
 
 		User user = userQueryFacade.findUserByLoginName(token.getUsername());
 		if (user != null) {
-			if (!LoginConstant.NORMAL_USER.equals(user.getStatus())) {
-				throw new LockedAccountException(LoginConstant.Locked_Account);
+			// 数据库状态字段类型为varchar，则需要进行字符串比较
+//			if (!LoginConstant.NORMAL_USER.equals(user.getStatus())) {
+			// 数据库状态字段类型为char或者int，则直接是用==操作符比较
+			if (LoginConstant.NORMAL_USER != user.getStatus()) {
+				throw new LockedAccountException(LoginConstant.LOCKED_ACCOUNT);
 			}
 			/*
 			 * return new SimpleAuthenticationInfo(user,
