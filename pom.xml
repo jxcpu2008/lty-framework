@@ -1,0 +1,31 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>lty</groupId>
+	<artifactId>lty-launch</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>lty-launch</name>
+	<url>http://maven.apache.org</url>
+
+	<modules>
+		<!-- All conponents project will be listed here -->
+		<module>component/pom.xml</module>
+	
+		<!-- All utility projects will be listed here -->
+		<module>util/pom.xml</module>
+		
+		<!-- framework related projects will be listed here -->
+		<module>framework/pom.xml</module>
+
+		<!-- api gateway project will be listed here -->
+		<module>api-gateway/pom.xml</module>
+		
+		<!-- application projects will be listed here -->
+		<module>app/pom.xml</module>
+	</modules>
+	
+	
+</project>

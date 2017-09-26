@@ -1,0 +1,31 @@
+单体应用和分布式应用可以切换
+开发的时候单体应用
+生产的时候用分布式
+
+单体应用：
+app-web pom.xml
+加上：
+<dependency>
+	<groupId>lty.apps</groupId>
+	<artifactId>lty-app-service-auth</artifactId>
+	<version>${service-auth.version}</version>
+</dependency>
+
+app-web/resources/spring/spring-content.xml
+<import resource="classpath:spring/spring-mybatis.xml" />
+
+mapping 需要放到app-web 的 resources
+
+
+分布式应用：
+app-web pom.xml
+去掉：
+<dependency>
+	<groupId>lty.apps</groupId>
+	<artifactId>lty-app-service-auth</artifactId>
+	<version>${service-auth.version}</version>
+</dependency>
+
+app-web/resources/spring/spring-content.xml
+<import resource="classpath:spring/dubbo-consumer.xml" />
+
