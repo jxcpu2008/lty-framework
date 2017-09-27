@@ -60,7 +60,7 @@ public class BasicController {
 			logger.info(LogConstant.LOG_MARK + ex.getStackTrace());
 			return setFailed(LoginConstant.LOGIN_FAIL);
 		} else if (ex instanceof LockedAccountException) {
-			logger.info(LogConstant.LOG_MARK + LoginConstant.Locked_Account + ex.getMessage());
+			logger.info(LogConstant.LOG_MARK + LoginConstant.LOCKED_ACCOUNT + ex.getMessage());
 			return setFailed(LogConstant.LOG_MARK);
 		} else if (ex instanceof AuthenticationException) {
 			logger.info(LogConstant.LOG_MARK + LoginConstant.LOGIN_AUTHENTICATION);
