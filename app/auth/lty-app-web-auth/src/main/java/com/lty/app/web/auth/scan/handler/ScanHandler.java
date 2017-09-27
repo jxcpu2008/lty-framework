@@ -1,4 +1,4 @@
-package com.lty.app.web.auth.scanHandler;
+package com.lty.app.web.auth.scan.handler;
 
 import java.util.List;
 import java.util.Map;
