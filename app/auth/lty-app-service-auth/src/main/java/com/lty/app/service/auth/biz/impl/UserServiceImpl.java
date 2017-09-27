@@ -97,8 +97,8 @@ public class UserServiceImpl extends BaseService<User, UserQueryModel> implement
 //		record.setType(BaseConstant.NUMBER_ONE);
 		
 		// 枚举数据库常量示例
-		record.setStatus(String.valueOf(UserStatus.NORMAL.state()));
-		record.setType(String.valueOf(UserType.USER.type()));
+		record.setStatus(UserStatus.NORMAL.value());
+		record.setType(UserType.USER.value());
 		
 //		record.setStatus(UserStatus.NORMAL);
 //		record.setType(UserType.USER);
