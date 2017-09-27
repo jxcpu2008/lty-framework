@@ -12,7 +12,10 @@
                         http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd">
 
 	<!-- 自动扫描controller包下的所有类，使其认为spring mvc的控制器 -->
-	<context:component-scan base-package="com.lty.app.web.auth.controller" />
+<!-- 	<context:component-scan base-package="com.lty.app.web.auth.controller" /> -->
+	<!-- model在facade项目，model加上了@ApiModel注解，故需要扫描facade项目的model包，但是没有效果 -->
+	<context:component-scan base-package="com.lty.app.web.auth.controller,com.lty.app.facade.auth.model" />
+	
 	<mvc:annotation-driven />
 	<bean class="com.lty.app.web.auth.config.SwaggerConfig"></bean>
 	<!-- 开启API在线文档 -->
@@ -132,6 +135,6 @@
 	</bean>
 	
 	<!-- 自定义扫描begin -->
-	<bean id="hander" class="com.lty.app.web.auth.scanHandler.ScanHandler"></bean>
+	<bean id="hander" class="com.lty.app.web.auth.scan.handler.ScanHandler"></bean>
 
 </beans>
