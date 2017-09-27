@@ -21,4 +21,8 @@
 	<!-- 分布式的时候用服务消费 -->
 <!-- 	<import resource="classpath:spring/dubbo-consumer.xml" /> -->
 
+	<!-- ActiveMQ 测试 -->
+	<import resource="classpath:mq/mq-config.xml" />
+<!-- 	<import resource="classpath:application-config.xml" /> -->
+
 </beans>
