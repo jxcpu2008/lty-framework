@@ -291,26 +291,27 @@
 				iconCls : 'icon-add',
 				handler : function() {
 					var d = $(this).closest('.window-body');
-					$('#admin_yhglAdd_addForm').form(
-						'submit',
+					$('#admin_yhglAdd_addForm').form('submit',
 						{
-							url : '${pageContext.request.contextPath}/user/insertSelective.shtml',
+// 							url : '${pageContext.request.contextPath}/user/insertSelective.shtml',
+							url : '${pageContext.request.contextPath}/user/insert.shtml',
 							success : function(result) {
 								try {
 									var r = $.parseJSON(result);
 									if (r.success) {
-										$('#admin_yhgl_datagrid').datagrid(
-											'insertRow',
+										$('#admin_yhgl_datagrid').datagrid('insertRow',
 											{
 												index : 0,
 												row : r.obj
 											});
 										d.dialog('destroy');
 									}
-									$.messager.show({
-										title : '提示',
-										msg : r.msg
-									});
+									
+									$.messager.show(
+										{
+											title : '提示',
+											msg : r.msg
+										});
 									p.dialog('close');
 									
 								} catch (e) {

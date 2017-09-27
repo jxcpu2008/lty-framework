@@ -57,6 +57,12 @@
 						data-options="editable:false, valueField:'value', textField:'desc'" />
 				</td>
 			</tr>
+			<tr>
+				<th style="width: 100px;">生日</th>
+				<td>
+					<input name="birthday" onFocus="WdatePicker({readOnly:true, dateFmt:'yyyy-MM-dd'})"/>
+				</td>
+			</tr>
 		</table>
 	</form>
 </div>

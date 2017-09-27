@@ -73,6 +73,17 @@ public class User extends Model {
 	@XStreamAsAttribute
 	@ApiModelProperty(value = "用户序号")
 	private int userNo;
+	
+	// 测试前端传递Date类型字段
+	private Date birthday;
+
+	public Date getBirthday() {
+		return birthday;
+	}
+
+	public void setBirthday(Date birthday) {
+		this.birthday = birthday;
+	}
 
 	public String getId() {
 		return id;

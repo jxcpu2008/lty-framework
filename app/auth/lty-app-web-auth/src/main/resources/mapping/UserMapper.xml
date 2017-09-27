@@ -5,8 +5,11 @@
 		<id column="id" property="id" jdbcType="VARCHAR" />
 		<result column="login_name" property="loginName" jdbcType="VARCHAR" />
 		<result column="password" property="password" jdbcType="VARCHAR" />
-		<result column="status" property="status" jdbcType="VARCHAR" />
-		<result column="type" property="type" jdbcType="VARCHAR" />
+		<!-- 数据库中已经将status字段类型从VARCHAR改为INT -->
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<!-- 数据库中已经将type字段类型从VARCHAR改为INT -->
+		<result column="type" property="type" jdbcType="INTEGER" />
+		<result column="birthday" property="birthday" jdbcType="DATE" />
 		<result column="payment_code" property="paymentCode" jdbcType="VARCHAR" />
 		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
 		<result column="user_no" property="userNo" jdbcType="BIGINT" />
@@ -17,20 +20,20 @@
 		login_name,
 		status,
 		type,
+		birthday,
 		payment_code,
 		create_time,
 		user_no
 	</sql>
 	
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
-		select <include refid="Base_Column_List" />
-		from t_auth_user
-		where id = #{id,jdbcType=VARCHAR}
+		select <include refid="Base_Column_List" /> from t_auth_user
+		where id = #{id, jdbcType=VARCHAR}
 	</select>
 
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
 		delete from t_auth_user
-		where id = #{id,jdbcType=VARCHAR}
+		where id = #{id, jdbcType=VARCHAR}
 	</delete>
 	
 	<insert id="insert" parameterType="User">
@@ -41,6 +44,7 @@
 			password,
 			status,
 			type,
+			birthday,
 			payment_code,
 			create_time,
 			user_no
@@ -50,8 +54,9 @@
 			#{id, jdbcType=VARCHAR},
 			#{loginName, jdbcType=VARCHAR},
 			#{password, jdbcType=VARCHAR},
-			#{status, jdbcType=VARCHAR},
-			#{type, jdbcType=VARCHAR},
+			#{status, jdbcType=INTEGER},
+			#{type, jdbcType=INTEGER},
+			#{birthday, jdbcType=DATE},
 			#{paymentCode, jdbcType=VARCHAR},
 			#{createTime, jdbcType=TIMESTAMP},
 			#{userNo, jdbcType=BIGINT}
@@ -76,6 +81,9 @@
 			<if test="type != null">
 				type,
 			</if>
+			<if test="birthday != null">
+				birthday,
+			</if>
 			<if test="paymentCode != null">
 				payment_code,
 			</if>
@@ -97,10 +105,13 @@
 				#{password, jdbcType=VARCHAR},
 			</if>
 			<if test="status != null">
-				#{status, jdbcType=VARCHAR},
+				#{status, jdbcType=INTEGER},
 			</if>
 			<if test="type != null">
-				#{type, jdbcType=VARCHAR},
+				#{type, jdbcType=INTEGER},
+			</if>
+			<if test="birthday != null">
+				#{birthday, jdbcType=DATE},
 			</if>
 			<if test="paymentCode != null">
 				#{paymentCode, jdbcType=VARCHAR},
@@ -124,10 +135,13 @@
 				password = #{password, jdbcType=VARCHAR},
 			</if>
 			<if test="status != null">
-				status = #{status, jdbcType=VARCHAR},
+				status = #{status, jdbcType=INTEGER},
 			</if>
 			<if test="type != null">
-				type = #{type, jdbcType=VARCHAR},
+				type = #{type, jdbcType=INTEGER},
+			</if>
+			<if test="birthday != null">
+				birthday = #{birthday, jdbcType=DATE},
 			</if>
 			<if test="paymentCode != null">
 				payment_code = #{paymentCode,jdbcType=VARCHAR},
@@ -152,10 +166,13 @@
 				password = #{password, jdbcType=VARCHAR},
 			</if>
 			<if test="status != null">
-				status = #{status, jdbcType=VARCHAR},
+				status = #{status, jdbcType=INTEGER},
 			</if>
 			<if test="type != null">
-				type = #{type, jdbcType=VARCHAR},
+				type = #{type, jdbcType=INTEGER},
+			</if>
+			<if test="birthday != null">
+				birthday = #{birthday, jdbcType=DATE},
 			</if>
 			<if test="paymentCode != null">
 				payment_code = #{paymentCode, jdbcType=VARCHAR},
@@ -181,10 +198,13 @@
 				and password = #{password, jdbcType=VARCHAR}
 			</if>
 			<if test="status != null">
-				and status = #{status, jdbcType=VARCHAR}
+				and status = #{status, jdbcType=INTEGER}
 			</if>
 			<if test="type != null">
-				and type = #{type, jdbcType=VARCHAR}
+				and type = #{type, jdbcType=INTEGER}
+			</if>
+			<if test="birthday != null">
+				and birthday = #{birthday, jdbcType=DATE}
 			</if>
 			<if test="paymentCode != null">
 				and payment_code = #{paymentCode, jdbcType=VARCHAR}
@@ -211,6 +231,7 @@
 		u.login_name,
 		u.status,
 		u.type,
+		u.birthday,
 		u.payment_code,
 		u.create_time,
 		u.user_no,
@@ -254,16 +275,7 @@
 	</sql>
 	
 	<select id="login" resultMap="BaseResultMap" parameterType="User">
-		select
-		id,
-		login_name,
-		password,
-		status,
-		type,
-		payment_code,
-		create_time,
-		user_no
-		from t_auth_user
+		select * from t_auth_user
 		<trim prefix="WHERE" prefixOverrides="AND">
 			<if test="loginName != null">
 				and login_name = #{loginName, jdbcType=VARCHAR}
@@ -275,13 +287,7 @@
 	</select>
 
 	<select id="findUserByLoginName" resultMap="BaseResultMap" parameterType="java.lang.String">
-		select
-		id,
-		login_name,
-		password,
-		status,
-		type
-		from t_auth_user
+		select * from t_auth_user
 		where login_name = #{loginName, jdbcType=VARCHAR}
 	</select>
 </mapper>

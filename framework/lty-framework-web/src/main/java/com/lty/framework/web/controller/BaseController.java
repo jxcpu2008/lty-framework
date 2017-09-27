@@ -1,6 +1,5 @@
 package com.lty.framework.web.controller;
 
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,12 +35,14 @@ public abstract class BaseController<M, QM extends BaseModel> extends BasicContr
 
 	@ApiOperation(value = "新增用户", httpMethod = "POST", notes = "新增用户")
 	@RequestMapping(value = "/insert", method = RequestMethod.POST)
-	public Json insert(@RequestBody M record) throws Exception {
+//	public Json insert(@RequestBody M record) throws Exception {
+	public Json insert(M record) throws Exception {
 		return getManagerFacade().insert(record) > 0 ? setSimpleSuccess(record) : setFailed();
 	}
 
 	@ApiOperation(value = "复制用户", httpMethod = "POST", notes = "复制用户")
 	@RequestMapping(value = "/insertSelective", method = RequestMethod.POST)
+//	public Json insertSelective(@RequestBody M record) throws Exception {
 	public Json insertSelective(M record) throws Exception {
 		return getManagerFacade().insertSelective(record) > 0 ? setSimpleSuccess(record) : setFailed();
 	}
