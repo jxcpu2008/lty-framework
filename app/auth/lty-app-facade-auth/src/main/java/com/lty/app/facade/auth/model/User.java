@@ -8,6 +8,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import com.lty.framework.common.model.Model;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
+import com.wordnik.swagger.annotations.ApiModel;
+import com.wordnik.swagger.annotations.ApiModelProperty;
 
 /**
  * 
@@ -17,6 +19,8 @@ import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
  * @版本: 1.0
  */
 @XStreamAlias("User")
+// @ApiModel注解一般搭配@ApiModelProperty注解使用，在springmvc的controller方法中，相应的模型参数需要使用@RequstBody注解，前端传递的参数才能被转换为model对象
+@ApiModel(value = "用户实体类")
 public class User extends Model {
 	private static final long serialVersionUID = 1L;
 
@@ -33,28 +37,42 @@ public class User extends Model {
 	}
 
 	@XStreamAsAttribute
+	@ApiModelProperty(value = "用户id")
 	private String id;
 
 	@XStreamAsAttribute
+	@ApiModelProperty(value = "用户登陆名称", required=true)
 	private String loginName;
 
+	@ApiModelProperty(value = "用户登陆密码")
 	private String password;
 
+//	@XStreamAsAttribute
+//	private String status;
+//
+//	@XStreamAsAttribute
+//	private String type;
+	
 	@XStreamAsAttribute
-	private String status;
+	@ApiModelProperty(value = "用户状态")
+	private int status;
 
 	@XStreamAsAttribute
-	private String type;
+	@ApiModelProperty(value = "用户类型")
+	private int type;
 
 	@XStreamAsAttribute
+	@ApiModelProperty(value = "支付方式")
 	private String paymentCode;
 
 	@XStreamAsAttribute
 	@DateTimeFormat(pattern="yyyy-MM-dd hh:mm:ss")
+	@ApiModelProperty(value = "用户创建时间")
 	private Date createTime;
 
 	@XStreamAsAttribute
-	private Long userNo;
+	@ApiModelProperty(value = "用户序号")
+	private int userNo;
 
 	public String getId() {
 		return id;
@@ -88,19 +106,19 @@ public class User extends Model {
 		this.password = password == null ? null : password.trim();
 	}
 
-	public String getStatus() {
+	public int getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(int status) {
 		this.status = status;
 	}
 
-	public String getType() {
+	public int getType() {
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(int type) {
 		this.type = type;
 	}
 
@@ -120,11 +138,11 @@ public class User extends Model {
 		this.createTime = createTime;
 	}
 
-	public Long getUserNo() {
+	public int getUserNo() {
 		return userNo;
 	}
 
-	public void setUserNo(Long userNo) {
+	public void setUserNo(int userNo) {
 		this.userNo = userNo;
 	}
 }
