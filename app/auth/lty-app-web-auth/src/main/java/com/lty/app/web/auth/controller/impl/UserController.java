@@ -22,6 +22,7 @@ import com.lty.framework.common.facade.BaseManagerFacadeI;
 import com.lty.framework.common.facade.BaseQueryFacadeI;
 import com.lty.framework.common.model.Json;
 import com.lty.framework.common.page.Page;
+import com.lty.framework.common.util.EnumUtil;
 import com.lty.framework.web.controller.BaseController;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -68,13 +69,15 @@ public class UserController extends BaseController<User, UserQueryModel> impleme
 		// 枚举数据库常量示例
 		Page pageData = userQueryFacade.findUserAndRoles(uqm);
 		List<User> userList = pageData.getRows();
-		for (User user : userList) {
-			UserStatus userStatus = UserStatus.valueOf(Integer.parseInt(user.getStatus()));
-			user.setStatus(userStatus.value());
-			
-			UserType userType = UserType.valueOf(Integer.parseInt(user.getType()));
-			user.setType(userType.desc());
-		}
+		
+		// 针对数据库状态字段类型为varchar类型的转换
+//		for (User user : userList) {
+//			UserStatus userStatus = UserStatus.valueOf(Integer.parseInt(user.getStatus()));
+//			user.setStatus(userStatus.desc());
+//			
+//			UserType userType = UserType.valueOf(Integer.parseInt(user.getType()));
+//			user.setType(userType.desc());
+//		}
 		return pageData;
 		
 //		return userQueryFacade.findUserAndRoles(uqm);
@@ -89,6 +92,16 @@ public class UserController extends BaseController<User, UserQueryModel> impleme
 		Page page = userQueryFacade.findUserAndRoles(uqm);
 		mv.addObject("page", page);
 		return mv;
+	}
+	
+	@RequestMapping(value = "/types", method = RequestMethod.GET)
+	public List userTypes() throws Exception {
+		return EnumUtil.getValueList(UserType.class);
+	}
+	
+	@RequestMapping(value = "/status", method = RequestMethod.GET)
+	public List userStatus() throws Exception {
+		return EnumUtil.getValueList(UserStatus.class);
 	}
 
 	@ApiOperation(value = "修改用户", httpMethod = "POST", notes = "修改用户")
