@@ -18,7 +18,12 @@ import com.mangofactory.swagger.plugin.SwaggerSpringMvcPlugin;
  * @版本: 1.0
  */
 @Configuration
+// 下面这句等同于springmvc的配置文件，因为已经提供了springmvc配置文件，所以这里不能加上这个注解，否则系统会生成两个web context
+//@EnableWebMvc
 @EnableSwagger
+// model在facade项目，model加上了@ApiModel注解，故需要扫描facade项目的model包，但是没有效果
+// 下面这句等同spring配置文件的context:component-scan配置
+//@ComponentScan(basePackages={"com.lty.app.web.auth.controller", "com.lty.app.facade.auth.model"})
 public class SwaggerConfig {
 	@Resource
 	private SpringSwaggerConfig springSwaggerConfig;
