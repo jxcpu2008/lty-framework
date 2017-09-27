@@ -1,12 +1,12 @@
 <%@ page language="java" pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 <script type="text/javascript" src="${pageContext.request.contextPath}/jslib/syUtil.js" charset="utf-8"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/jslib/enum.js" charset="utf-8"></script>
 <script type="text/javascript">
 	var map = new Map();  
 	map['loginName'] = 'login_name';
 
 	$(function() {
-		$('#admin_yhgl_datagrid')
-				.datagrid(
+		$('#admin_yhgl_datagrid').datagrid(
 						{
 							url : '${pageContext.request.contextPath}/user/findUserAndRolesByPage.shtml',
 							method : 'GET',
@@ -34,100 +34,109 @@
 								sortable : true
 							} ] ],
 							columns : [ [
-									{
-										field : 'realName',
-										title : '账户信息',
-										align : 'center',
-										width : 60,
-										formatter : function(value, row, index) {
-											return 'jerry';
-										}
-									},
-									{
-										field : 'type',
-										title : '类型',
-										align : 'center',
-										width : 150,
-										sortable : false
-									},
-									{
-										field : 'status',
-										title : '状态',
-										align : 'center',
-										width : 150,
-										sortable : false
-									},
-									{
-										field : 'createTime',
-										title : '创建时间',
-										width : 150,
-										align : 'center',
-										formatter : function(value) {
-											if (value == null || value == '') {  
-										        return '';  
-										    }  
-										    var dt;  
-										    if (value instanceof Date) {  
-										        dt = value;  
-										    } else {  
-										        dt = new Date(value);  
-										    }  
-										  
-										    return dt.format("yyyy-MM-dd hh:mm:ss");
-										}
-									},
-									{
-										field : 'userNo',
-										title : '用户号',
-										width : 150,
-										align : 'center',
-										sortable : false
-									},
-									{
-										field : 'roles',
-										title : '所属角色名称',
-										align : 'center',
-										width : 150,
-										formatter : function(value, row, index) {
-											var rolenames = '';
-											if (value && value.length > 0) {
-												for (var i = 0; i < value.length; i++) {
-													rolenames += value[i].name
-															+ ",";
-												}
-
-												rolenames = rolenames
-														.toString()
-														.substring(
-																0,
-																rolenames.length - 1)
+								{
+									field : 'realName',
+									title : '账户信息',
+									align : 'center',
+									width : 60,
+									formatter : function(value, row, index) {
+										return 'jerry';
+									}
+								},
+								{
+									field : 'type',
+									title : '类型',
+									align : 'center',
+									width : 150,
+									sortable : false,
+									formatter : function(value) {
+										return displayUserType(value);
+									}
+								},
+								{
+									field : 'status',
+									title : '状态',
+									align : 'center',
+									width : 150,
+									sortable : false,
+									formatter : function(value) {
+										return displayUserStatus(value);
+									}
+								},
+								{
+									field : 'createTime',
+									title : '创建时间',
+									width : 150,
+									align : 'center',
+									formatter : function(value) {
+										if (value == null || value == '') {  
+									        return '';  
+									    }  
+									    var dt;  
+									    if (value instanceof Date) {  
+									        dt = value;  
+									    } else {  
+									        dt = new Date(value);  
+									    }  
+									  
+									    return dt.format("yyyy-MM-dd hh:mm:ss");
+									}
+								},
+								{
+									field : 'userNo',
+									title : '用户号',
+									width : 150,
+									align : 'center',
+									sortable : false
+								},
+								{
+									field : 'roles',
+									title : '所属角色名称',
+									align : 'center',
+									width : 150,
+									formatter : function(value, row, index) {
+										var rolenames = '';
+										if (value && value.length > 0) {
+											for (var i = 0; i < value.length; i++) {
+												rolenames += value[i].name
+														+ ",";
 											}
-											return rolenames;
 
+											rolenames = rolenames
+													.toString()
+													.substring(
+															0,
+															rolenames.length - 1)
 										}
-									},
-									{
-										field : 'action',
-										title : '动作',
-										width : 100,
-										formatter : function(value, row, index) {
-											if (row.id == '0') {
-												return '系统用户';
-											} else {
-												return formatString(
-														'<img onclick="admin_yhgl_editFun(\'{0}\');" src="{1}"/>&nbsp;<img onclick="admin_yhgl_deleteFun(\'{2}\');" src="{3}"/>&nbsp;<img onclick="admin_yhgl_modifyPwdFun(\'{4}\');" src="{5}"/>',
-														row.id,
-														'${pageContext.request.contextPath}/style/images/extjs_icons/pencil.png',
-														row.id,
-														'${pageContext.request.contextPath}/style/images/extjs_icons/cancel.png',
-														row.id,
-														'${pageContext.request.contextPath}/style/images/extjs_icons/lock/lock_edit.png');
-											}
+										return rolenames;
+
+									}
+								},
+								{
+									field : 'action',
+									title : '动作',
+									width : 100,
+									formatter : function(value, row, index) {
+										if (row.id == '0') {
+											return '系统用户';
+										} else {
+											return formatString(
+													'<img onclick="admin_yhgl_editFun(\'{0}\');" src="{1}"/>&nbsp;<img onclick="admin_yhgl_deleteFun(\'{2}\');" src="{3}"/>&nbsp;<img onclick="admin_yhgl_modifyPwdFun(\'{4}\');" src="{5}"/>',
+													row.id,
+													'${pageContext.request.contextPath}/style/images/extjs_icons/pencil.png',
+													row.id,
+													'${pageContext.request.contextPath}/style/images/extjs_icons/cancel.png',
+													row.id,
+													'${pageContext.request.contextPath}/style/images/extjs_icons/lock/lock_edit.png');
 										}
-									} ] ],
+									}
+								}
+							] ],
+							
 							onBeforeLoad : function(param) {
 						        onSortColumn(param, map);  
 						    },
+						    
 							onRowContextMenu : function(e, rowIndex, rowData) {
 								e.preventDefault();
 								$(this).datagrid('unselectAll');
@@ -137,6 +146,7 @@
 									top : e.pageY
 								});
 							},
+							
 							toolbar : [ {
 								text : '增加',
 								iconCls : 'icon-add',
@@ -267,59 +277,57 @@
 			}
 		});
 	}
+	
 	function admin_yhgl_appendFun() {
-		$('#admin_yhgl_datagrid').datagrid('uncheckAll')
-				.datagrid('unselectAll').datagrid('clearSelections');
-		var p = parent.lw
-				.dialog({
-					href : '${pageContext.request.contextPath}/admin/yhglAdd.jsp',
-					width : 520,
-					height : 200,
-					modal : true,
-					title : '添加用户',
-					buttons : [ {
-						text : '增加',
-						iconCls : 'icon-add',
-						handler : function() {
-							var d = $(this).closest('.window-body');
-							$('#admin_yhglAdd_addForm')
-									.form(
-											'submit',
+		$('#admin_yhgl_datagrid').datagrid('uncheckAll').datagrid('unselectAll').datagrid('clearSelections');
+		var p = parent.lw.dialog({
+			href : '${pageContext.request.contextPath}/admin/yhglAdd.jsp',
+			width : 540,
+			height : 200,
+			modal : true,
+			title : '添加用户',
+			buttons : [ {
+				text : '增加',
+				iconCls : 'icon-add',
+				handler : function() {
+					var d = $(this).closest('.window-body');
+					$('#admin_yhglAdd_addForm').form(
+						'submit',
+						{
+							url : '${pageContext.request.contextPath}/user/insertSelective.shtml',
+							success : function(result) {
+								try {
+									var r = $.parseJSON(result);
+									if (r.success) {
+										$('#admin_yhgl_datagrid').datagrid(
+											'insertRow',
 											{
-												url : '${pageContext.request.contextPath}/user/insertSelective.shtml',
-												success : function(result) {
-													try {
-														var r = $
-																.parseJSON(result);
-														if (r.success) {
-															$(
-																	'#admin_yhgl_datagrid')
-																	.datagrid(
-																			'insertRow',
-																			{
-																				index : 0,
-																				row : r.obj
-																			});
-															d.dialog('destroy');
-														}
-														$.messager.show({
-															title : '提示',
-															msg : r.msg
-														});
-														p.dialog('close');
-													} catch (e) {
-														$.messager.alert('提示',
-																result);
-													}
-												}
+												index : 0,
+												row : r.obj
 											});
+										d.dialog('destroy');
+									}
+									$.messager.show({
+										title : '提示',
+										msg : r.msg
+									});
+									p.dialog('close');
+									
+								} catch (e) {
+									$.messager.alert('提示', result);
+								}
+							}
 						}
-					} ],
-					onClose : function() {
-						$(this).dialog('destroy');
-					}
-				});
+					);
+				}
+			} ],
+			
+			onClose : function() {
+				$(this).dialog('destroy');
+			}
+		});
 	}
+	
 	function admin_yhgl_removeFun() {
 		var rows = $('#admin_yhgl_datagrid').datagrid('getChecked');
 		if (rows.length > 0) {
